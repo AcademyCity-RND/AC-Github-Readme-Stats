@@ -1,0 +1,107 @@
+name: Automated Compatible Dependency Update
+
+on:
+  schedule:
+    # Run every Wednesday at 04:00 UTC
+    - cron: "0 4 * * 3"
+  workflow_dispatch:
+    inputs:
+      strategy:
+        description: "Update strategy to apply"
+        required: true
+        type: choice
+        options:
+          - safe (audit fix + npm update)
+          - full (audit fix --force)
+        default: "safe (audit fix + npm update)"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-update:
+    name: Find, Update & Verify Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - name: Install Current Dependencies
+        run: |
+          npm ci
+
+      - name: Apply Safe Dependency Updates & Fixes
+        run: |
+          if [ "${{ inputs.strategy }}" = "full (audit fix --force)" ]; then
+            echo "Applying full audit fix (force mode)..."
+            npm audit fix --force || true
+          else
+            echo "Applying safe semver-compatible updates..."
+            npm audit fix || true
+            npm update || true
+          fi
+
+      - name: Check for Package Modifications
+        id: git-check
+        run: |
+          if [ -n "$(git status --porcelain package.json package-lock.json)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes detected in package manifests."
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "All dependencies are already clean and up to date."
+          fi
+
+      - name: Uji Kompatibilitas - Run Test Suite
+        if: steps.git-check.outputs.has_changes == 'true'
+        run: |
+          echo "Verifying unit tests..."
+          npm run test
+
+      - name: Uji Kompatibilitas - Run Linter
+        if: steps.git-check.outputs.has_changes == 'true'
+        run: |
+          echo "Verifying code style & linter..."
+          npm run lint
+
+      - name: Generate Post-Update Audit Report
+        if: steps.git-check.outputs.has_changes == 'true'
+        run: |
+          npm audit --json > audit.json || true
+          npm outdated --json > outdated.json || true
+          node .github/scripts/audit-summary.cjs audit.json outdated.json
+
+      - name: Create Pull Request (Automated & Tested)
+        if: steps.git-check.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message:
+            "chore(deps): automated security & compatible dependencies update"
+          branch: "chore/automated-deps-update"
+          base: "master"
+          delete-branch: true
+          title:
+            "chore(deps): automated security & compatible dependencies update"
+          body: |
+            ## 🛡️ Automated Safe Dependency Update
+
+            This Pull Request was generated automatically by the Dependency Auto-Update workflow.
+
+            ### 🧪 Compatibility & Stability Verification
+            - ✅ `npm run test` (All unit tests passed)
+            - ✅ `npm run lint` (Code styling verified)
+
+            ### 🔒 Security Status
+            Security patches and compatible minor/patch dependencies have been applied without breaking changes.
+          labels: |
+            dependencies
+            security
+            automated-pr

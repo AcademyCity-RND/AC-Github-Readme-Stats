@@ -1,0 +1,73 @@
+name: Dependency Security & Quality Audit
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - dev
+  pull_request:
+    branches:
+      - master
+      - main
+      - dev
+  schedule:
+    # Run every Monday at 04:00 UTC
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      fail_on_critical:
+        description: "Fail workflow run if Critical vulnerabilities are found"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit-and-verify:
+    name: Audit CVE & Verify Build (Ensure Green)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+
+      - name: Check Outdated Dependencies
+        run: |
+          npm outdated --json > outdated.json || true
+
+      - name: Scan Vulnerabilities (npm audit)
+        run: |
+          npm audit --json > audit.json || true
+
+      - name: Generate Visual Markdown Summary
+        run: |
+          node .github/scripts/audit-summary.cjs audit.json outdated.json
+
+      - name: Uji Kompatibilitas - Run Test Suite
+        run: |
+          echo "Running tests to ensure green build..."
+          npm run test
+
+      - name: Uji Kompatibilitas - Run Linter
+        run: |
+          echo "Checking linter..."
+          npm run lint
+
+      - name: Enforce Security Policy (Optional Gate)
+        if: ${{ inputs.fail_on_critical == true }}
+        run: |
+          echo "Enforcing critical security gate..."
+          npm audit --audit-level=critical
