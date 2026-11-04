@@ -3,17 +3,17 @@ name: Automated Compatible Dependency Update
 on:
   schedule:
     # Run every Wednesday at 04:00 UTC
-    - cron: '0 4 * * 3'
+    - cron: "0 4 * * 3"
   workflow_dispatch:
     inputs:
       strategy:
-        description: 'Update strategy to apply'
+        description: "Update strategy to apply"
         required: true
         type: choice
         options:
           - safe (audit fix + npm update)
           - full (audit fix --force)
-        default: 'safe (audit fix + npm update)'
+        default: "safe (audit fix + npm update)"
 
 permissions:
   contents: write
@@ -31,7 +31,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Current Dependencies
         run: |
@@ -83,11 +83,13 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(deps): automated security & compatible dependencies update"
+          commit-message:
+            "chore(deps): automated security & compatible dependencies update"
           branch: "chore/automated-deps-update"
           base: "master"
           delete-branch: true
-          title: "chore(deps): automated security & compatible dependencies update"
+          title:
+            "chore(deps): automated security & compatible dependencies update"
           body: |
             ## 🛡️ Automated Safe Dependency Update
 

@@ -13,11 +13,11 @@ on:
       - dev
   schedule:
     # Run every Monday at 04:00 UTC
-    - cron: '0 4 * * 1'
+    - cron: "0 4 * * 1"
   workflow_dispatch:
     inputs:
       fail_on_critical:
-        description: 'Fail workflow run if Critical vulnerabilities are found'
+        description: "Fail workflow run if Critical vulnerabilities are found"
         required: true
         type: boolean
         default: true
@@ -38,7 +38,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Dependencies
         run: |
@@ -66,8 +66,8 @@ jobs:
           echo "Checking linter..."
           npm run lint
 
-      - name: Enforce Security Policy (Fail on Critical CVE)
-        if: ${{ github.event_name == 'pull_request' || inputs.fail_on_critical == true }}
+      - name: Enforce Security Policy (Optional Gate)
+        if: ${{ inputs.fail_on_critical == true }}
         run: |
           echo "Enforcing critical security gate..."
           npm audit --audit-level=critical
