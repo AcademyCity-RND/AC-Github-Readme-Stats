@@ -31,7 +31,11 @@
     "format:check": "prettier --check .",
     "prepare": "husky",
     "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./scripts/**/*.js\" \"./tests/**/*.js\" \"./api/**/*.js\" \"./themes/**/*.js\"",
-    "bench": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.bench.config.js"
+    "bench": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.bench.config.js",
+    "audit:check": "npm audit",
+    "audit:fix": "npm audit fix",
+    "deps:check": "npm outdated",
+    "deps:report": "node .github/scripts/audit-summary.cjs audit.json outdated.json"
   },
   "author": "Anurag Hazra",
   "license": "MIT",
