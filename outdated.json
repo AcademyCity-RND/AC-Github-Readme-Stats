@@ -1,0 +1,79 @@
+{
+  "@actions/core": {
+    "current": "2.0.3",
+    "wanted": "2.0.3",
+    "latest": "3.0.1",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/@actions/core"
+  },
+  "@actions/github": {
+    "current": "6.0.1",
+    "wanted": "6.0.1",
+    "latest": "9.1.1",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/@actions/github"
+  },
+  "@eslint/js": {
+    "current": "9.39.5",
+    "wanted": "9.39.5",
+    "latest": "10.0.1",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/@eslint/js"
+  },
+  "@testing-library/jest-dom": {
+    "current": "6.9.1",
+    "wanted": "6.9.1",
+    "latest": "7.0.1",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/@testing-library/jest-dom"
+  },
+  "dotenv": {
+    "current": "17.4.2",
+    "wanted": "17.4.2",
+    "latest": "18.0.10",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/dotenv"
+  },
+  "eslint": {
+    "current": "9.39.5",
+    "wanted": "9.39.5",
+    "latest": "10.14.0",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/eslint"
+  },
+  "eslint-plugin-jsdoc": {
+    "current": "61.7.1",
+    "wanted": "61.7.1",
+    "latest": "65.4.5",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/eslint-plugin-jsdoc"
+  },
+  "globals": {
+    "current": "16.5.0",
+    "wanted": "16.5.0",
+    "latest": "17.14.0",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/globals"
+  },
+  "js-yaml": {
+    "current": "4.3.2",
+    "wanted": "4.3.2",
+    "latest": "5.5.0",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/js-yaml"
+  },
+  "lint-staged": {
+    "current": "16.4.0",
+    "wanted": "16.4.0",
+    "latest": "17.6.0",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/lint-staged"
+  },
+  "parse-diff": {
+    "current": "0.11.1",
+    "wanted": "0.11.1",
+    "latest": "0.12.0",
+    "dependent": "AC-Github-Readme-Stats",
+    "location": "/home/runner/work/AC-Github-Readme-Stats/AC-Github-Readme-Stats/node_modules/parse-diff"
+  }
+}
